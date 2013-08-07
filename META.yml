@@ -1,0 +1,50 @@
+---
+abstract: 'Parse a terminfo data base using Marpa'
+author:
+  - 'Jean-Damien Durand <jeandamiendurand@free.fr>'
+build_requires:
+  ExtUtils::MakeMaker: 0
+  File::Find: 0
+  File::Spec::Functions: 0
+  File::Temp: 0
+  List::Util: 0
+  Test::More: 0
+configure_requires:
+  ExtUtils::MakeMaker: 6.30
+dynamic_config: 0
+generated_by: 'Dist::Zilla version 4.300034, CPAN::Meta::Converter version 2.131560'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: MarpaX-Database-Terminfo
+no_index:
+  directory:
+    - t
+    - xt
+    - examples
+    - blog
+provides:
+  MarpaX::Database::Terminfo:
+    file: lib/MarpaX/Database/Terminfo.pm
+    version: 0.001
+  MarpaX::Database::Terminfo::Grammar:
+    file: lib/MarpaX/Database/Terminfo/Grammar.pm
+    version: 0.001
+  MarpaX::Database::Terminfo::Grammar::CharacterClasses:
+    file: lib/MarpaX/Database/Terminfo/Grammar/CharacterClasses.pm
+    version: 0.001
+requires:
+  Carp: 0
+  Log::Any: 0
+  Marpa::R2: 0
+  perl: 5.010
+  strict: 0
+  warnings: 0
+resources:
+  bugtracker: https://rt.cpan.org/Public/Dist/Display.html?Name=MarpaX-Database-Terminfo
+  homepage: https://metacpan.org/release/MarpaX-Database-Terminfo
+  repository: git://github.com/jddurand/marpax-database-terminfo.git
+version: 0.001
+x_contributors:
+  - 'jddurand <jeandamiendurand@free.fr>'
