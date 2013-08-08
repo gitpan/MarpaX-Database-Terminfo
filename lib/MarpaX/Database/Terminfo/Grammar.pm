@@ -5,7 +5,7 @@ package MarpaX::Database::Terminfo::Grammar;
 
 # ABSTRACT: Terminfo grammar in Marpa BNF
 
-our $VERSION = '0.001'; # VERSION
+our $VERSION = '0.002'; # VERSION
 
 
 sub new {
@@ -39,7 +39,7 @@ MarpaX::Database::Terminfo::Grammar - Terminfo grammar in Marpa BNF
 
 =head1 VERSION
 
-version 0.001
+version 0.002
 
 =head1 SYNOPSIS
 
@@ -84,24 +84,32 @@ the same terms as the Perl 5 programming language system itself.
 =cut
 
 __DATA__
-#
-# G1 As per http://nixdoc.net/man-pages/HP-UX/man4/terminfo.4.html#Formal%20Grammar
-# ---------------------------------------------------------------------------------
+# -------------------------------------------------------------------------
+# G1 As per:
+# - http://nixdoc.net/man-pages/HP-UX/man4/terminfo.4.html#Formal%20Grammar
+# - annotated modifications as per ncurses-5.9 documentation
+# -------------------------------------------------------------------------
 :default ::= action => [values] bless => ::lhs
 
-:start ::= descriptions
+:start ::= terminfoList
 
-descriptions ::= startOfHeaderLine restOfHeaderLine featureLines
-               | descriptions startOfHeaderLine restOfHeaderLine
-               | featureLines
+terminfoList ::= terminfo+
 
-restOfHeaderLine ::= (pipe) longname (comma NEWLINE)
-                   | aliases (pipe) longname (comma NEWLINE)
+#
+# Ncurses: restOfHeaderLine is optional
+#
+terminfo ::= startOfHeaderLine restOfHeaderLine featureLines
+           | startOfHeaderLine (comma newline) featureLines
+           | (blankline)
+           | (comment)
+
+restOfHeaderLine ::= (pipe) longname (comma newline)
+                   | aliases (pipe) longname (comma newline)
 
 featureLines ::= featureLine+
 
-featureLine ::= startFeatureLine features (comma NEWLINE)
-              | startFeatureLine (comma NEWLINE)
+featureLine ::= startFeatureLine features (comma newline)
+              | startFeatureLine (comma newline)
 
 startFeatureLine ::= startFeatureLineBoolean
                    | startFeatureLineNumeric
@@ -132,17 +140,22 @@ WS                    ~ [ \t]
 WS_maybe              ~ WS
 WS_maybe              ~
 WS_any                ~ WS*
-WS_many               ~ WS+
+_WS_many               ~ WS+
+WS_many               ~ _WS_many
 COMMA                 ~ ',' WS_maybe
 POUND                 ~ '#'
 EQUAL                 ~ '='
 _NEWLINE              ~ [\n]
+#_NEWLINES             ~ _NEWLINE+
 NEWLINE               ~ _NEWLINE
 NOT_NEWLINE_any       ~ [^\n]*
 
 _NAME                 ~ [\p{MarpaX::Database::Terminfo::Grammar::CharacterClasses::InName}]+
 _ALIAS                ~ [\p{MarpaX::Database::Terminfo::Grammar::CharacterClasses::InAlias}]+
-_LONGNAME             ~ [\p{MarpaX::Database::Terminfo::Grammar::CharacterClasses::InLongname}]+
+#
+# Ncurses: , is allowed in the longname
+#
+_LONGNAME             ~ [\p{MarpaX::Database::Terminfo::Grammar::CharacterClasses::InNcursesLongname}]+
 _INISPRINTEXCEPTCOMMA ~ [\p{MarpaX::Database::Terminfo::Grammar::CharacterClasses::InIsPrintExceptComma}]+
 
 ALIAS                 ~ _ALIAS
@@ -151,6 +164,12 @@ LONGNAME              ~ _LONGNAME
 BOOLEAN               ~ _NAME
 NUMERIC               ~ _NAME POUND I_CONSTANT
 STRING                ~ _NAME EQUAL _INISPRINTEXCEPTCOMMA
+#
+# Ncurses: STRING capability can be empty
+#
+STRING                ~ _NAME EQUAL
+BLANKLINE             ~ WS_any _NEWLINE
+COMMENT               ~ WS_any POUND NOT_NEWLINE_any _NEWLINE
 
 alias                 ::= MAXMATCH | ALIAS
 aliasInColumnOne      ::= MAXMATCH | ALIASINCOLUMNONE
@@ -160,12 +179,11 @@ numeric               ::= MAXMATCH | NUMERIC
 string                ::= MAXMATCH | STRING
 pipe                  ::= MAXMATCH | PIPE
 comma                 ::= MAXMATCH | COMMA
+newline               ::= MAXMATCH | NEWLINE
 spaces                ::= MAXMATCH | WS_many
+blankline             ::= MAXMATCH | BLANKLINE
+comment               ::= MAXMATCH | COMMENT
 
-COMMENT               ~ WS_any POUND NOT_NEWLINE_any _NEWLINE
-:discard              ~ COMMENT
-BLANKLINE             ~ WS_any _NEWLINE
-:discard              ~ BLANKLINE
 #
 # I_CONSTANT from C point of view
 #

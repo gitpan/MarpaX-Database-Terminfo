@@ -5,7 +5,7 @@ package MarpaX::Database::Terminfo::Grammar::CharacterClasses;
 
 # ABSTRACT: Terminfo character classes
 
-our $VERSION = '0.001'; # VERSION
+our $VERSION = '0.002'; # VERSION
 
 
 our $COMMA_HEX  = sprintf('%x', ord(','));
@@ -25,6 +25,12 @@ END
 sub InCommaPipe {
     return <<END;
 $COMMA_HEX
+$PIPE_HEX
+END
+}
+
+sub InPipe {
+    return <<END;
 $PIPE_HEX
 END
 }
@@ -54,6 +60,13 @@ sub InLongname {
     return <<END;
 +utf8::IsPrint
 -MarpaX::Database::Terminfo::Grammar::CharacterClasses::InCommaPipe
+END
+}
+
+sub InNcursesLongname {
+    return <<END;
++utf8::IsPrint
+-MarpaX::Database::Terminfo::Grammar::CharacterClasses::InPipe
 END
 }
 
@@ -92,7 +105,7 @@ MarpaX::Database::Terminfo::Grammar::CharacterClasses - Terminfo character class
 
 =head1 VERSION
 
-version 0.001
+version 0.002
 
 =head1 DESCRIPTION
 
