@@ -11,7 +11,7 @@ use Marpa::R2;
 use Log::Any qw/$log/;
 use Carp qw/croak/;
 
-our $VERSION = '0.002'; # VERSION
+our $VERSION = '0.003'; # VERSION
 
 
 #
@@ -36,7 +36,7 @@ our $I_CONSTANT = qr/(?:(0[xX][a-fA-F0-9]+(?:[uU](?:ll|LL|[lL])?|(?:ll|LL|[lL])[
 # In these regexps we add the embedded comma: \, (i.e. these are TWO characters)
 #
 our @TOKENSRE = (
-    [ 'ALIASINCOLUMNONE' , qr/(?:\A|\n)\G((?:$ESCAPED|\p{MarpaX::Database::Terminfo::Grammar::CharacterClasses::InAlias})+)/ ],
+    [ 'ALIASINCOLUMNONE' , qr/\G^((?:$ESCAPED|\p{MarpaX::Database::Terminfo::Grammar::CharacterClasses::InAlias})+)/ms ],
     [ 'PIPE'             , qr/\G(\|)/ ],
     [ 'LONGNAME'         , qr/\G((?:$ESCAPED|\p{MarpaX::Database::Terminfo::Grammar::CharacterClasses::InNcursesLongname})+), ?/ ],
     [ 'ALIAS'            , qr/\G((?:$ESCAPED|\p{MarpaX::Database::Terminfo::Grammar::CharacterClasses::InAlias})+)/ ],
@@ -46,8 +46,8 @@ our @TOKENSRE = (
     [ 'COMMA'            , qr/\G(, ?)/ ],
     [ 'NEWLINE'          , qr/\G(\n)/ ],
     [ 'WS_many'          , qr/\G( +)/ ],
-    [ 'BLANKLINE'        , qr/\G(?:\A|\n)([ \t]*\n)/ ],
-    [ 'COMMENT'          , qr/\G(?:\A|\n)([ \t]*#[^\n]*\n)/ ],
+    [ 'BLANKLINE'        , qr/\G^([ \t]*\n)/ms ],
+    [ 'COMMENT'          , qr/\G^([ \t]*#[^\n]*\n)/ms ],
     );
 
 my %events = (
@@ -168,7 +168,7 @@ MarpaX::Database::Terminfo - Parse a terminfo data base using Marpa
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 SYNOPSIS
 
