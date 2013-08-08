@@ -11,7 +11,7 @@ use Marpa::R2;
 use Log::Any qw/$log/;
 use Carp qw/croak/;
 
-our $VERSION = '0.003'; # VERSION
+our $VERSION = '0.004'; # VERSION
 
 
 #
@@ -168,7 +168,7 @@ MarpaX::Database::Terminfo - Parse a terminfo data base using Marpa
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 
@@ -215,7 +215,7 @@ Parses a terminfo database. Takes a pointer to a string as parameter.
 
 =head2 value($self)
 
-Returns Marpa's value on the parse tree. Ambiguous parse tree result is disabled and the module will croak if this happen.
+Returns Marpa value on the parse tree. Ambiguous parse tree result is disabled and the module will croak if this happen.
 
 =head1 SEE ALSO
 

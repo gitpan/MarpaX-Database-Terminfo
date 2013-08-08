@@ -5,7 +5,7 @@ package MarpaX::Database::Terminfo::Grammar;
 
 # ABSTRACT: Terminfo grammar in Marpa BNF
 
-our $VERSION = '0.003'; # VERSION
+our $VERSION = '0.004'; # VERSION
 
 
 sub new {
@@ -39,7 +39,7 @@ MarpaX::Database::Terminfo::Grammar - Terminfo grammar in Marpa BNF
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 

@@ -5,7 +5,7 @@ package MarpaX::Database::Terminfo::Grammar::CharacterClasses;
 
 # ABSTRACT: Terminfo character classes
 
-our $VERSION = '0.003'; # VERSION
+our $VERSION = '0.004'; # VERSION
 
 
 our $COMMA_HEX  = sprintf('%x', ord(','));
@@ -13,6 +13,7 @@ our $SLASH_HEX  = sprintf('%x', ord('/'));
 our $PIPE_HEX   = sprintf('%x', ord('|'));
 our $EQUAL_HEX  = sprintf('%x', ord('='));
 our $POUND_HEX  = sprintf('%x', ord('#'));
+
 
 sub InCommaSlashPipe {
     return <<END;
@@ -22,6 +23,7 @@ $PIPE_HEX
 END
 }
 
+
 sub InCommaPipe {
     return <<END;
 $COMMA_HEX
@@ -29,11 +31,13 @@ $PIPE_HEX
 END
 }
 
+
 sub InPipe {
     return <<END;
 $PIPE_HEX
 END
 }
+
 
 sub InCommaEqualPound {
     return <<END;
@@ -43,11 +47,13 @@ $POUND_HEX
 END
 }
 
+
 sub InComma {
     return <<END;
 $COMMA_HEX
 END
 }
+
 
 sub InAlias {
     return <<END;
@@ -56,12 +62,14 @@ sub InAlias {
 END
 }
 
+
 sub InLongname {
     return <<END;
 +utf8::IsPrint
 -MarpaX::Database::Terminfo::Grammar::CharacterClasses::InCommaPipe
 END
 }
+
 
 sub InNcursesLongname {
     return <<END;
@@ -70,6 +78,7 @@ sub InNcursesLongname {
 END
 }
 
+
 sub InName {
     return <<END;
 +utf8::IsPrint
@@ -77,12 +86,14 @@ sub InName {
 END
 }
 
+
 sub InIsPrintExceptComma {
     return <<END;
 +utf8::IsPrint
 -MarpaX::Database::Terminfo::Grammar::CharacterClasses::InComma
 END
 }
+
 
 sub InIsPrintAndIsGraph {
     return <<END;
@@ -105,11 +116,55 @@ MarpaX::Database::Terminfo::Grammar::CharacterClasses - Terminfo character class
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 DESCRIPTION
 
 This modules describes Terminfo character classes
+
+=head2 InCommaSlashPipe()
+
+Character class for ',', '/' and '|'.
+
+=head2 InCommaPipe()
+
+Character class for ',' and '|'.
+
+=head2 InPipe()
+
+Character class for '|'.
+
+=head2 InCommaEqualPound()
+
+Character class for ',', '=' and '#'
+
+=head2 InComma()
+
+Character class for ','
+
+=head2 InAlias()
+
+Character class for a terminfo alias.
+
+=head2 InLongname()
+
+Character class for a terminfo long name.
+
+=head2 InNcursesLongname()
+
+Character class for a (ncurses) terminfo long name.
+
+=head2 InName()
+
+Character class for a terminfo capability name.
+
+=head2 InIsPrintExceptComma()
+
+Character class for a isprint character except ','.
+
+=head2 InIsPrintAndIsGraph()
+
+Character class for a isprint or isgraph character
 
 =head1 AUTHOR
 

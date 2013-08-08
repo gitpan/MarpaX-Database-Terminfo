@@ -27,13 +27,13 @@ no_index:
 provides:
   MarpaX::Database::Terminfo:
     file: lib/MarpaX/Database/Terminfo.pm
-    version: 0.003
+    version: 0.004
   MarpaX::Database::Terminfo::Grammar:
     file: lib/MarpaX/Database/Terminfo/Grammar.pm
-    version: 0.003
+    version: 0.004
   MarpaX::Database::Terminfo::Grammar::CharacterClasses:
     file: lib/MarpaX/Database/Terminfo/Grammar/CharacterClasses.pm
-    version: 0.003
+    version: 0.004
 requires:
   Carp: 0
   Log::Any: 0
@@ -45,6 +45,6 @@ resources:
   bugtracker: https://rt.cpan.org/Public/Dist/Display.html?Name=MarpaX-Database-Terminfo
   homepage: https://metacpan.org/release/MarpaX-Database-Terminfo
   repository: git://github.com/jddurand/marpax-database-terminfo.git
-version: 0.003
+version: 0.004
 x_contributors:
   - 'jddurand <jeandamiendurand@free.fr>'

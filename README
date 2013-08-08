@@ -2,7 +2,7 @@ NAME
     MarpaX::Database::Terminfo - Parse a terminfo data base using Marpa
 
 VERSION
-    version 0.003
+    version 0.004
 
 SYNOPSIS
         use strict;
@@ -47,7 +47,7 @@ SUBROUTINES/METHODS
     Parses a terminfo database. Takes a pointer to a string as parameter.
 
   value($self)
-    Returns Marpa's value on the parse tree. Ambiguous parse tree result is
+    Returns Marpa value on the parse tree. Ambiguous parse tree result is
     disabled and the module will croak if this happen.
 
 SEE ALSO

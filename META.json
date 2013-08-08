@@ -60,15 +60,15 @@
    "provides" : {
       "MarpaX::Database::Terminfo" : {
          "file" : "lib/MarpaX/Database/Terminfo.pm",
-         "version" : "0.003"
+         "version" : "0.004"
       },
       "MarpaX::Database::Terminfo::Grammar" : {
          "file" : "lib/MarpaX/Database/Terminfo/Grammar.pm",
-         "version" : "0.003"
+         "version" : "0.004"
       },
       "MarpaX::Database::Terminfo::Grammar::CharacterClasses" : {
          "file" : "lib/MarpaX/Database/Terminfo/Grammar/CharacterClasses.pm",
-         "version" : "0.003"
+         "version" : "0.004"
       }
    },
    "release_status" : "stable",
@@ -84,7 +84,7 @@
          "web" : "https://github.com/jddurand/marpax-database-terminfo"
       }
    },
-   "version" : "0.003",
+   "version" : "0.004",
    "x_contributors" : [
       "jddurand <jeandamiendurand@free.fr>"
    ]
