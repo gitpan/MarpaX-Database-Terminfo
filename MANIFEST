@@ -8,10 +8,13 @@ README
 dist.ini
 lib/MarpaX/Database/Terminfo.pm
 lib/MarpaX/Database/Terminfo/Grammar.pm
+lib/MarpaX/Database/Terminfo/Grammar/Actions.pm
 lib/MarpaX/Database/Terminfo/Grammar/CharacterClasses.pm
+lib/MarpaX/Database/Terminfo/Grammar/Regexp.pm
+script/do_ncurses.pl
+share/ncurses-terminfo.storable
 t/00-compile.t
 t/00-report-prereqs.t
-t/ncurses.t
 t/test1.t
 t/test2.t
 xt/author/critic.t

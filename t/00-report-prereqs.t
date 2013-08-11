@@ -11,8 +11,10 @@ use List::Util qw/max/;
 
 my @modules = qw(
   Carp
+  Exporter
   ExtUtils::MakeMaker
   File::Find
+  File::ShareDir::Install
   File::Spec::Functions
   File::Temp
   List::Util

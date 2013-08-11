@@ -5,7 +5,7 @@ package MarpaX::Database::Terminfo::Grammar::CharacterClasses;
 
 # ABSTRACT: Terminfo character classes
 
-our $VERSION = '0.004'; # VERSION
+our $VERSION = '0.005'; # VERSION
 
 
 our $COMMA_HEX  = sprintf('%x', ord(','));
@@ -116,7 +116,7 @@ MarpaX::Database::Terminfo::Grammar::CharacterClasses - Terminfo character class
 
 =head1 VERSION
 
-version 0.004
+version 0.005
 
 =head1 DESCRIPTION
 

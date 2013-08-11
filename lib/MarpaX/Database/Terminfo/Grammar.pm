@@ -2,28 +2,46 @@ use strict;
 use warnings FATAL => 'all';
 
 package MarpaX::Database::Terminfo::Grammar;
+use MarpaX::Database::Terminfo::Grammar::Actions;
 
 # ABSTRACT: Terminfo grammar in Marpa BNF
 
-our $VERSION = '0.004'; # VERSION
+our $VERSION = '0.005'; # VERSION
 
 
 sub new {
-  my $class = shift;
+    my $class = shift;
 
-  my $self = {};
+    my $self = {};
 
-  $self->{_content} = do {local $/; <DATA>};
+    $self->{_content} = do {local $/; <DATA>};
+    $self->{_grammar_option} = {
+	action_object  => sprintf('%s::%s', __PACKAGE__, 'Actions'),
+	source => \$self->{_content}
+    };
+    $self->{_recce_option} = {};
 
-  bless($self, $class);
+    bless($self, $class);
 
-  return $self;
+    return $self;
 }
 
 
 sub content {
     my ($self) = @_;
     return $self->{_content};
+}
+
+
+sub grammar_option {
+    my ($self) = @_;
+    return $self->{_grammar_option};
+}
+
+
+sub recce_option {
+    my ($self) = @_;
+    return $self->{_recce_option};
 }
 
 
@@ -39,7 +57,7 @@ MarpaX::Database::Terminfo::Grammar - Terminfo grammar in Marpa BNF
 
 =head1 VERSION
 
-version 0.004
+version 0.005
 
 =head1 SYNOPSIS
 
@@ -61,6 +79,14 @@ Instance a new object.
 =head2 content($self)
 
 Returns the content of the grammar.
+
+=head2 grammar_option()
+
+Returns recommended option for Marpa::R2::Scanless::G->new(), returned as a reference to a hash.
+
+=head2 recce_option()
+
+Returns recommended option for Marpa::R2::Scanless::R->new(), returned as a reference to a hash.
 
 =head1 SEE ALSO
 
@@ -89,17 +115,15 @@ __DATA__
 # - http://nixdoc.net/man-pages/HP-UX/man4/terminfo.4.html#Formal%20Grammar
 # - annotated modifications as per ncurses-5.9 documentation
 # -------------------------------------------------------------------------
-:default ::= action => [values] bless => ::lhs
-
 :start ::= terminfoList
 
-terminfoList ::= terminfo+
+terminfoList ::= terminfo+ action => value
 
 #
 # Ncurses: restOfHeaderLine is optional
 #
-terminfo ::= startOfHeaderLine restOfHeaderLine featureLines
-           | startOfHeaderLine (comma newline) featureLines
+terminfo ::= startOfHeaderLine restOfHeaderLine featureLines   action => endTerminfo
+           | startOfHeaderLine (comma newline) featureLines    action => endTerminfo
            | (blankline)
            | (comment)
 
@@ -131,6 +155,19 @@ startOfHeaderLine       ::= aliasInColumnOne
 startFeatureLineBoolean ::= (spaces) boolean
 startFeatureLineNumeric ::= (spaces) numeric
 startFeatureLineString  ::= (spaces) string
+
+alias                 ::= MAXMATCH | ALIAS            action => alias
+aliasInColumnOne      ::= MAXMATCH | ALIASINCOLUMNONE action => alias
+longname              ::= MAXMATCH | LONGNAME         action => longname
+boolean               ::= MAXMATCH | BOOLEAN          action => boolean
+numeric               ::= MAXMATCH | NUMERIC          action => numeric
+string                ::= MAXMATCH | STRING           action => string
+pipe                  ::= MAXMATCH | PIPE
+comma                 ::= MAXMATCH | COMMA
+newline               ::= MAXMATCH | NEWLINE
+spaces                ::= MAXMATCH | WS_many
+blankline             ::= MAXMATCH | BLANKLINE
+comment               ::= MAXMATCH | COMMENT
 
 #
 # G0
@@ -170,19 +207,6 @@ STRING                ~ _NAME EQUAL _INISPRINTEXCEPTCOMMA
 STRING                ~ _NAME EQUAL
 BLANKLINE             ~ WS_any _NEWLINE
 COMMENT               ~ WS_any POUND NOT_NEWLINE_any _NEWLINE
-
-alias                 ::= MAXMATCH | ALIAS
-aliasInColumnOne      ::= MAXMATCH | ALIASINCOLUMNONE
-longname              ::= MAXMATCH | LONGNAME
-boolean               ::= MAXMATCH | BOOLEAN
-numeric               ::= MAXMATCH | NUMERIC
-string                ::= MAXMATCH | STRING
-pipe                  ::= MAXMATCH | PIPE
-comma                 ::= MAXMATCH | COMMA
-newline               ::= MAXMATCH | NEWLINE
-spaces                ::= MAXMATCH | WS_many
-blankline             ::= MAXMATCH | BLANKLINE
-comment               ::= MAXMATCH | COMMENT
 
 #
 # I_CONSTANT from C point of view

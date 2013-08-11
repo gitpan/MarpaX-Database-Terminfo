@@ -6,6 +6,8 @@ use 5.010;
 
 use ExtUtils::MakeMaker 6.30;
 
+use File::ShareDir::Install;
+install_share dist => "share";
 
 
 my %WriteMakefileArgs = (
@@ -13,7 +15,8 @@ my %WriteMakefileArgs = (
   "AUTHOR" => "Jean-Damien Durand <jeandamiendurand\@free.fr>",
   "BUILD_REQUIRES" => {},
   "CONFIGURE_REQUIRES" => {
-    "ExtUtils::MakeMaker" => "6.30"
+    "ExtUtils::MakeMaker" => "6.30",
+    "File::ShareDir::Install" => "0.03"
   },
   "DISTNAME" => "MarpaX-Database-Terminfo",
   "EXE_FILES" => [],
@@ -21,6 +24,7 @@ my %WriteMakefileArgs = (
   "NAME" => "MarpaX::Database::Terminfo",
   "PREREQ_PM" => {
     "Carp" => 0,
+    "Exporter" => 0,
     "Log::Any" => 0,
     "Marpa::R2" => 0,
     "strict" => 0,
@@ -34,7 +38,7 @@ my %WriteMakefileArgs = (
     "List::Util" => 0,
     "Test::More" => 0
   },
-  "VERSION" => "0.004",
+  "VERSION" => "0.005",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -72,5 +76,10 @@ delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
 
 WriteMakefile(%WriteMakefileArgs);
 
+{
+package
+MY;
+use File::ShareDir::Install qw(postamble);
+}
 
 

@@ -14,6 +14,7 @@ marpa
 ncurses
 terminfo
 BNF
+longname
 Jean
 Durand
 jeandamiendurand
@@ -24,3 +25,5 @@ Database
 Terminfo
 Grammar
 CharacterClasses
+Actions
+Regexp

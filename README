@@ -2,7 +2,7 @@ NAME
     MarpaX::Database::Terminfo - Parse a terminfo data base using Marpa
 
 VERSION
-    version 0.004
+    version 0.005
 
 SYNOPSIS
         use strict;

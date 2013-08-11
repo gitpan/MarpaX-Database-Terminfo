@@ -3,7 +3,7 @@ use warnings FATAL => 'all';
 
 package MarpaX::Database::Terminfo;
 use MarpaX::Database::Terminfo::Grammar;
-use MarpaX::Database::Terminfo::Grammar::CharacterClasses;
+use MarpaX::Database::Terminfo::Grammar::Regexp qw/@TOKENSRE/;
 use Marpa::R2;
 
 # ABSTRACT: Parse a terminfo data base using Marpa
@@ -11,44 +11,8 @@ use Marpa::R2;
 use Log::Any qw/$log/;
 use Carp qw/croak/;
 
-our $VERSION = '0.004'; # VERSION
+our $VERSION = '0.005'; # VERSION
 
-
-#
-# List of escaped characters allowed in terminfo source files
-# ^x : Control-x (for any appropriate x)
-# \x where x can be a b E e f l n r s t ^ \ , : 0
-#
-our $CONTROLX      = qr/(?<!\^)(?>\^\^)*\^./;                                                       # Takes care of ^^
-our $ALLOWED_BACKSLASHED_CHARACTERS = qr/(?:a|b|E|e|f|l|n|r|s|t|\^|\\|,|:|0|\d{3})/;
-our $BACKSLASHX    = qr/(?<!\\)(?>\\\\)*\\$ALLOWED_BACKSLASHED_CHARACTERS/;                         # Takes care of \\
-our $ESCAPED       = qr/(?:$CONTROLX|$BACKSLASHX)/;
-our $I_CONSTANT = qr/(?:(0[xX][a-fA-F0-9]+(?:[uU](?:ll|LL|[lL])?|(?:ll|LL|[lL])[uU]?)?)             # Hexadecimal
-                      |([1-9][0-9]*(?:[uU](?:ll|LL|[lL])?|(?:ll|LL|[lL])[uU]?)?)                    # Decimal
-                      |(0[0-7]*(?:[uU](?:ll|LL|[lL])?|(?:ll|LL|[lL])[uU]?)?)                        # Octal
-                      |([uUL]?'(?:[^'\\\n]|\\(?:[\'\"\?\\abfnrtv]|[0-7]{1..3}|x[a-fA-F0-9]+))+')    # Character
-                    )/x;
-
-#
-# It is important to have LONGNAME before ALIAS because LONGNAME will do a lookahead on COMMA
-# It is important to have NUMERIC and STRING before BOOLEAN because BOOLEAN is a subset of them
-# It is important to have BLANKLINE and COMMENT at the end: they are 'discarded' by the grammar
-# In these regexps we add the embedded comma: \, (i.e. these are TWO characters)
-#
-our @TOKENSRE = (
-    [ 'ALIASINCOLUMNONE' , qr/\G^((?:$ESCAPED|\p{MarpaX::Database::Terminfo::Grammar::CharacterClasses::InAlias})+)/ms ],
-    [ 'PIPE'             , qr/\G(\|)/ ],
-    [ 'LONGNAME'         , qr/\G((?:$ESCAPED|\p{MarpaX::Database::Terminfo::Grammar::CharacterClasses::InNcursesLongname})+), ?/ ],
-    [ 'ALIAS'            , qr/\G((?:$ESCAPED|\p{MarpaX::Database::Terminfo::Grammar::CharacterClasses::InAlias})+)/ ],
-    [ 'NUMERIC'          , qr/\G((?:$ESCAPED|\p{MarpaX::Database::Terminfo::Grammar::CharacterClasses::InName})+#$I_CONSTANT)/ ],
-    [ 'STRING'           , qr/\G((?:$ESCAPED|\p{MarpaX::Database::Terminfo::Grammar::CharacterClasses::InName})+=(?:$ESCAPED|\p{MarpaX::Database::Terminfo::Grammar::CharacterClasses::InIsPrintExceptComma})*)/ ],
-    [ 'BOOLEAN'          , qr/\G((?:$ESCAPED|\p{MarpaX::Database::Terminfo::Grammar::CharacterClasses::InName})+)/ ],
-    [ 'COMMA'            , qr/\G(, ?)/ ],
-    [ 'NEWLINE'          , qr/\G(\n)/ ],
-    [ 'WS_many'          , qr/\G( +)/ ],
-    [ 'BLANKLINE'        , qr/\G^([ \t]*\n)/ms ],
-    [ 'COMMENT'          , qr/\G^([ \t]*#[^\n]*\n)/ms ],
-    );
 
 my %events = (
     'MAXMATCH' => sub {
@@ -96,7 +60,9 @@ sub new {
   my $self = {};
 
   my $grammarObj = MarpaX::Database::Terminfo::Grammar->new(@_);
-  $self->{_G} = Marpa::R2::Scanless::G->new({source => \$grammarObj->content, bless_package => __PACKAGE__});
+  my $grammar_option = $grammarObj->grammar_option();
+  $grammar_option->{bless_package} = __PACKAGE__;
+  $self->{_G} = Marpa::R2::Scanless::G->new($grammar_option);
   $self->{_R} = Marpa::R2::Scanless::R->new({grammar => $self->{_G}});
 
   bless($self, $class);
@@ -168,7 +134,7 @@ MarpaX::Database::Terminfo - Parse a terminfo data base using Marpa
 
 =head1 VERSION
 
-version 0.004
+version 0.005
 
 =head1 SYNOPSIS
 

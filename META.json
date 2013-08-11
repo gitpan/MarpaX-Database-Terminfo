@@ -4,7 +4,7 @@
       "Jean-Damien Durand <jeandamiendurand@free.fr>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.300034, CPAN::Meta::Converter version 2.131560",
+   "generated_by" : "Dist::Zilla version 4.300034, CPAN::Meta::Converter version 2.132140",
    "license" : [
       "perl_5"
    ],
@@ -24,7 +24,8 @@
    "prereqs" : {
       "configure" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : "6.30"
+            "ExtUtils::MakeMaker" : "6.30",
+            "File::ShareDir::Install" : "0.03"
          }
       },
       "develop" : {
@@ -39,6 +40,7 @@
       "runtime" : {
          "requires" : {
             "Carp" : "0",
+            "Exporter" : "0",
             "Log::Any" : "0",
             "Marpa::R2" : "0",
             "perl" : "5.010",
@@ -60,15 +62,23 @@
    "provides" : {
       "MarpaX::Database::Terminfo" : {
          "file" : "lib/MarpaX/Database/Terminfo.pm",
-         "version" : "0.004"
+         "version" : "0.005"
       },
       "MarpaX::Database::Terminfo::Grammar" : {
          "file" : "lib/MarpaX/Database/Terminfo/Grammar.pm",
-         "version" : "0.004"
+         "version" : "0.005"
+      },
+      "MarpaX::Database::Terminfo::Grammar::Actions" : {
+         "file" : "lib/MarpaX/Database/Terminfo/Grammar/Actions.pm",
+         "version" : "0.005"
       },
       "MarpaX::Database::Terminfo::Grammar::CharacterClasses" : {
          "file" : "lib/MarpaX/Database/Terminfo/Grammar/CharacterClasses.pm",
-         "version" : "0.004"
+         "version" : "0.005"
+      },
+      "MarpaX::Database::Terminfo::Grammar::Regexp" : {
+         "file" : "lib/MarpaX/Database/Terminfo/Grammar/Regexp.pm",
+         "version" : "0.005"
       }
    },
    "release_status" : "stable",
@@ -84,7 +94,7 @@
          "web" : "https://github.com/jddurand/marpax-database-terminfo"
       }
    },
-   "version" : "0.004",
+   "version" : "0.005",
    "x_contributors" : [
       "jddurand <jeandamiendurand@free.fr>"
    ]

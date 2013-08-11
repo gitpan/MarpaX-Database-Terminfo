@@ -11,8 +11,9 @@ build_requires:
   Test::More: 0
 configure_requires:
   ExtUtils::MakeMaker: 6.30
+  File::ShareDir::Install: 0.03
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.300034, CPAN::Meta::Converter version 2.131560'
+generated_by: 'Dist::Zilla version 4.300034, CPAN::Meta::Converter version 2.132140'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -27,15 +28,22 @@ no_index:
 provides:
   MarpaX::Database::Terminfo:
     file: lib/MarpaX/Database/Terminfo.pm
-    version: 0.004
+    version: 0.005
   MarpaX::Database::Terminfo::Grammar:
     file: lib/MarpaX/Database/Terminfo/Grammar.pm
-    version: 0.004
+    version: 0.005
+  MarpaX::Database::Terminfo::Grammar::Actions:
+    file: lib/MarpaX/Database/Terminfo/Grammar/Actions.pm
+    version: 0.005
   MarpaX::Database::Terminfo::Grammar::CharacterClasses:
     file: lib/MarpaX/Database/Terminfo/Grammar/CharacterClasses.pm
-    version: 0.004
+    version: 0.005
+  MarpaX::Database::Terminfo::Grammar::Regexp:
+    file: lib/MarpaX/Database/Terminfo/Grammar/Regexp.pm
+    version: 0.005
 requires:
   Carp: 0
+  Exporter: 0
   Log::Any: 0
   Marpa::R2: 0
   perl: 5.010
@@ -45,6 +53,6 @@ resources:
   bugtracker: https://rt.cpan.org/Public/Dist/Display.html?Name=MarpaX-Database-Terminfo
   homepage: https://metacpan.org/release/MarpaX-Database-Terminfo
   repository: git://github.com/jddurand/marpax-database-terminfo.git
-version: 0.004
+version: 0.005
 x_contributors:
   - 'jddurand <jeandamiendurand@free.fr>'
