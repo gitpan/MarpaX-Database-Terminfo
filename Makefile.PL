@@ -11,8 +11,8 @@ install_share dist => "share";
 
 
 my %WriteMakefileArgs = (
-  "ABSTRACT" => "Parse a terminfo data base using Marpa",
-  "AUTHOR" => "Jean-Damien Durand <jeandamiendurand\@free.fr>",
+  "ABSTRACT" => "Terminfo interface",
+  "AUTHOR" => "jddurand <jeandamiendurand\@free.fr>",
   "BUILD_REQUIRES" => {},
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => "6.30",
@@ -25,20 +25,27 @@ my %WriteMakefileArgs = (
   "PREREQ_PM" => {
     "Carp" => 0,
     "Exporter" => 0,
+    "File::ShareDir" => 0,
     "Log::Any" => 0,
     "Marpa::R2" => 0,
+    "Storable" => 0,
+    "Time::HiRes" => 0,
+    "base" => 0,
+    "charnames" => 0,
+    "constant" => 0,
     "strict" => 0,
     "warnings" => 0
   },
   "TEST_REQUIRES" => {
     "ExtUtils::MakeMaker" => 0,
     "File::Find" => 0,
+    "File::Spec" => 0,
     "File::Spec::Functions" => 0,
     "File::Temp" => 0,
     "List::Util" => 0,
     "Test::More" => 0
   },
-  "VERSION" => "0.005",
+  "VERSION" => "0.006",
   "test" => {
     "TESTS" => "t/*.t"
   }

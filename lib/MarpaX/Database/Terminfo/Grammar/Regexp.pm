@@ -9,16 +9,18 @@ our @EXPORT_OK = qw/@TOKENSRE %TOKENSRE/;
 
 # ABSTRACT: Terminfo grammar regexps
 
-our $VERSION = '0.005'; # VERSION
+our $VERSION = '0.006'; # VERSION
 
 
 #
 # List of escaped characters allowed in terminfo source files
 # ^x : Control-x (for any appropriate x)
-# \x where x can be a b E e f l n r s t ^ \ , : 0
+# any appropriate x here is all the ASCII Control Characters (C0 set + DEL, even if it is outdated)
+# \x where x can be a b E e f l n r s t ^ \ , : 0 [0-7]{3}
 #
-our $CONTROLX      = qr/(?<!\^)(?>\^\^)*\^./;                                                       # Takes care of ^^
-our $ALLOWED_BACKSLASHED_CHARACTERS = qr/(?:a|b|E|e|f|l|n|r|s|t|\^|\\|,|:|0|\d{3})/;
+our $C0 =          qr/[\@A-Z\[\\\]\^_ \?]/;
+our $CONTROLX      = qr/(?<!\^)(?>\^\^)*\^$C0/;                                                       # Takes care of ^^
+our $ALLOWED_BACKSLASHED_CHARACTERS = qr/(?:a|b|E|e|f|l|n|r|s|t|\^|\\|,|:|0|[0-7]{3})/;
 our $BACKSLASHX    = qr/(?<!\\)(?>\\\\)*\\$ALLOWED_BACKSLASHED_CHARACTERS/;                         # Takes care of \\
 our $ESCAPED       = qr/(?:$CONTROLX|$BACKSLASHX)/;
 our $I_CONSTANT = qr/(?:(0[xX][a-fA-F0-9]+(?:[uU](?:ll|LL|[lL])?|(?:ll|LL|[lL])[uU]?)?)             # Hexadecimal
@@ -78,7 +80,7 @@ MarpaX::Database::Terminfo::Grammar::Regexp - Terminfo grammar regexps
 
 =head1 VERSION
 
-version 0.005
+version 0.006
 
 =head1 DESCRIPTION
 
@@ -86,11 +88,11 @@ This modules give the regular expressions associated to terminfo grammar.
 
 =head1 AUTHOR
 
-Jean-Damien Durand <jeandamiendurand@free.fr>
+jddurand <jeandamiendurand@free.fr>
 
 =head1 CONTRIBUTOR
 
-jddurand <jeandamiendurand@free.fr>
+Jean-Damien Durand <jeandamiendurand@free.fr>
 
 =head1 COPYRIGHT AND LICENSE
 

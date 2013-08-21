@@ -5,7 +5,7 @@ package MarpaX::Database::Terminfo::Grammar::CharacterClasses;
 
 # ABSTRACT: Terminfo character classes
 
-our $VERSION = '0.005'; # VERSION
+our $VERSION = '0.006'; # VERSION
 
 
 our $COMMA_HEX  = sprintf('%x', ord(','));
@@ -116,7 +116,7 @@ MarpaX::Database::Terminfo::Grammar::CharacterClasses - Terminfo character class
 
 =head1 VERSION
 
-version 0.005
+version 0.006
 
 =head1 DESCRIPTION
 
@@ -168,11 +168,11 @@ Character class for a isprint or isgraph character
 
 =head1 AUTHOR
 
-Jean-Damien Durand <jeandamiendurand@free.fr>
+jddurand <jeandamiendurand@free.fr>
 
 =head1 CONTRIBUTOR
 
-jddurand <jeandamiendurand@free.fr>
+Jean-Damien Durand <jeandamiendurand@free.fr>
 
 =head1 COPYRIGHT AND LICENSE
 

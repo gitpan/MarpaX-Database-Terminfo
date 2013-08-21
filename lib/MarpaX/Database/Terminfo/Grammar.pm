@@ -6,15 +6,17 @@ use MarpaX::Database::Terminfo::Grammar::Actions;
 
 # ABSTRACT: Terminfo grammar in Marpa BNF
 
-our $VERSION = '0.005'; # VERSION
+our $VERSION = '0.006'; # VERSION
 
+
+our $GRAMMAR_CONTENT = do {local $/; <DATA>};
 
 sub new {
     my $class = shift;
 
     my $self = {};
 
-    $self->{_content} = do {local $/; <DATA>};
+    $self->{_content} = $GRAMMAR_CONTENT;
     $self->{_grammar_option} = {
 	action_object  => sprintf('%s::%s', __PACKAGE__, 'Actions'),
 	source => \$self->{_content}
@@ -57,7 +59,7 @@ MarpaX::Database::Terminfo::Grammar - Terminfo grammar in Marpa BNF
 
 =head1 VERSION
 
-version 0.005
+version 0.006
 
 =head1 SYNOPSIS
 
@@ -80,11 +82,11 @@ Instance a new object.
 
 Returns the content of the grammar.
 
-=head2 grammar_option()
+=head2 grammar_option($self)
 
 Returns recommended option for Marpa::R2::Scanless::G->new(), returned as a reference to a hash.
 
-=head2 recce_option()
+=head2 recce_option($self)
 
 Returns recommended option for Marpa::R2::Scanless::R->new(), returned as a reference to a hash.
 
@@ -94,11 +96,11 @@ L<Marpa::R2>
 
 =head1 AUTHOR
 
-Jean-Damien Durand <jeandamiendurand@free.fr>
+jddurand <jeandamiendurand@free.fr>
 
 =head1 CONTRIBUTOR
 
-jddurand <jeandamiendurand@free.fr>
+Jean-Damien Durand <jeandamiendurand@free.fr>
 
 =head1 COPYRIGHT AND LICENSE
 
@@ -250,5 +252,5 @@ ES         ~ BS ES_AFTERBS
 # Following http://stackoverflow.com/questions/17773976/prevent-naive-longest-token-matching-in-marpar2scanless we
 # will always match a longer substring than the one originally wanted.
 #
-:lexeme ~ MAXMATCH pause => before event => MAXMATCH
+:lexeme ~ <MAXMATCH> pause => before event => 'MAXMATCH'
 MAXMATCH   ~ [\p{MarpaX::Database::Terminfo::Grammar::CharacterClasses::InIsPrintAndIsGraph}]+

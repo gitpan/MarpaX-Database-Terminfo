@@ -3,12 +3,13 @@ use warnings FATAL => 'all';
 
 package MarpaX::Database::Terminfo::Grammar::Actions;
 use MarpaX::Database::Terminfo::Grammar::Regexp qw/%TOKENSRE/;
+use MarpaX::Database::Terminfo::Constants qw/:types/;
 use Carp qw/carp/;
 use Log::Any qw/$log/;
 
 # ABSTRACT: Terminfo grammar actions
 
-our $VERSION = '0.005'; # VERSION
+our $VERSION = '0.006'; # VERSION
 
 
 
@@ -40,20 +41,23 @@ sub _getTerminfo {
     my ($self) = @_;
 
     if (! defined($self->{_terminfo}->[-1])) {
-	$self->{_terminfo}->[-1] = {alias => [], longname => '', feature => {}};
+	$self->{_terminfo}->[-1] = {alias => [], longname => '', feature => []};
     }
     return $self->{_terminfo}->[-1];
 }
 
 sub _pushFeature {
-    my ($self, $type, $feature, $value) = @_;
+    my ($self, $type, $name, $value) = @_;
 
     my $terminfo = $self->_getTerminfo;
 
-    if (exists($terminfo->{feature}->{$feature})) {
-	$log->warnf('%s %s: feature %s overwriten', $terminfo->{alias} || [], $terminfo->{longname} || '', $feature);
+    foreach (@{$terminfo->{feature}}) {
+	if ($_->{name} eq $name) {
+	    $log->warnf('%s %s: feature %s overwriten', $terminfo->{alias} || [], $terminfo->{longname} || '', $name);
+	}
     }
-    $terminfo->{feature}->{$feature} = {type => $type, value => $value};
+
+    push(@{$terminfo->{feature}}, {type => $type, name => $name, value => $value});
 }
 
 
@@ -71,7 +75,10 @@ sub alias {
 
 sub boolean {
     my ($self, $boolean) = @_;
-    return $self->_pushFeature(0, $boolean, undef);
+    #
+    # If boolean ends with '@' then it is explicitely false
+    #
+    return $self->_pushFeature(TERMINFO_BOOLEAN, $boolean, substr($boolean, -1, 1) eq '@' ? 0 : 1);
 }
 
 
@@ -79,7 +86,7 @@ sub numeric {
     my ($self, $numeric) = @_;
 
     $numeric =~ /$TOKENSRE{NUMERIC}/;
-    return $self->_pushFeature(1, substr($numeric, $-[2], $+[2] - $-[2]), substr($numeric, $-[3], $+[3] - $-[3]));
+    return $self->_pushFeature(TERMINFO_NUMERIC, substr($numeric, $-[2], $+[2] - $-[2]), substr($numeric, $-[3], $+[3] - $-[3]));
 }
 
 
@@ -87,7 +94,7 @@ sub string {
     my ($self, $string) = @_;
 
     $string =~ /$TOKENSRE{STRING}/;
-    return $self->_pushFeature(3, substr($string, $-[2], $+[2] - $-[2]), substr($string, $-[3], $+[3] - $-[3]));
+    return $self->_pushFeature(TERMINFO_STRING, substr($string, $-[2], $+[2] - $-[2]), substr($string, $-[3], $+[3] - $-[3]));
 }
 
 1;
@@ -104,7 +111,7 @@ MarpaX::Database::Terminfo::Grammar::Actions - Terminfo grammar actions
 
 =head1 VERSION
 
-version 0.005
+version 0.006
 
 =head1 DESCRIPTION
 
@@ -144,11 +151,11 @@ Push a new terminfo placeholder.
 
 =head1 AUTHOR
 
-Jean-Damien Durand <jeandamiendurand@free.fr>
+jddurand <jeandamiendurand@free.fr>
 
 =head1 CONTRIBUTOR
 
-jddurand <jeandamiendurand@free.fr>
+Jean-Damien Durand <jeandamiendurand@free.fr>
 
 =head1 COPYRIGHT AND LICENSE
 

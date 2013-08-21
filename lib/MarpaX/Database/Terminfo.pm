@@ -11,12 +11,12 @@ use Marpa::R2;
 use Log::Any qw/$log/;
 use Carp qw/croak/;
 
-our $VERSION = '0.005'; # VERSION
+our $VERSION = '0.006'; # VERSION
 
 
 my %events = (
     'MAXMATCH' => sub {
-        my ($recce, $bufferp, $string, $start, $length) = @_;
+        my ($recce, $bufferp, $tokensrep, $string, $start, $length) = @_;
 
 	my @expected = @{$recce->terminals_expected()};
 	my $prev = pos(${$bufferp});
@@ -25,7 +25,7 @@ my %events = (
 	if ($log->is_trace) {
 	    $log->tracef('Expected terminals: %s', \@expected);
 	}
-	foreach (@TOKENSRE) {
+	foreach (@{$tokensrep}) {
 	    my ($token, $re) = @{$_};
 	    if ((grep {$_ eq $token} @expected)) {
 		if (${$bufferp} =~ $re) {
@@ -63,7 +63,10 @@ sub new {
   my $grammar_option = $grammarObj->grammar_option();
   $grammar_option->{bless_package} = __PACKAGE__;
   $self->{_G} = Marpa::R2::Scanless::G->new($grammar_option);
-  $self->{_R} = Marpa::R2::Scanless::R->new({grammar => $self->{_G}});
+
+  my $recce_option = $grammarObj->recce_option();
+  $recce_option->{grammar} = $self->{_G};
+  $self->{_R} = Marpa::R2::Scanless::R->new($recce_option);
 
   bless($self, $class);
 
@@ -71,8 +74,8 @@ sub new {
 }
 # ----------------------------------------------------------------------------------------
 
-sub parse {
-    my ($self, $bufferp) = @_;
+sub _parse {
+    my ($self, $bufferp, $tokensrep) = @_;
 
     my $max = length(${$bufferp});
     for (
@@ -85,13 +88,18 @@ sub parse {
         for my $event_data (@{$self->{_R}->events}) {
             my ($name) = @{$event_data};
             my $code = $events{$name} // die "no code for event $name";
-            $self->{_R}->$code($bufferp, $str, $start, $length);
+            $self->{_R}->$code($bufferp, $tokensrep, $str, $start, $length);
         }
     }
 
     return $self;
 }
-# ----------------------------------------------------------------------------------------
+
+sub parse {
+    my ($self, $bufferp) = @_;
+
+    return $self->_parse($bufferp, \@TOKENSRE);
+}
 # ----------------------------------------------------------------------------------------
 
 sub value {
@@ -134,7 +142,7 @@ MarpaX::Database::Terminfo - Parse a terminfo data base using Marpa
 
 =head1 VERSION
 
-version 0.005
+version 0.006
 
 =head1 SYNOPSIS
 
@@ -189,32 +197,13 @@ L<Unix Documentation Project - terminfo|http://nixdoc.net/man-pages/HP-UX/man4/t
 
 L<GNU Ncurses|http://www.gnu.org/software/ncurses/>
 
-=for :stopwords cpan testmatrix url annocpan anno bugtracker rt cpants kwalitee diff irc mailto metadata placeholders metacpan
-
-=head1 SUPPORT
-
-=head2 Bugs / Feature Requests
-
-Please report any bugs or feature requests through the issue tracker
-at L<https://rt.cpan.org/Public/Dist/Display.html?Name=MarpaX-Database-Terminfo>.
-You will be notified automatically of any progress on your issue.
-
-=head2 Source Code
-
-This is open source software.  The code repository is available for
-public review and contribution under the terms of the license.
-
-L<https://github.com/jddurand/marpax-database-terminfo>
-
-  git clone git://github.com/jddurand/marpax-database-terminfo.git
-
 =head1 AUTHOR
 
-Jean-Damien Durand <jeandamiendurand@free.fr>
+jddurand <jeandamiendurand@free.fr>
 
 =head1 CONTRIBUTOR
 
-jddurand <jeandamiendurand@free.fr>
+Jean-Damien Durand <jeandamiendurand@free.fr>
 
 =head1 COPYRIGHT AND LICENSE
 

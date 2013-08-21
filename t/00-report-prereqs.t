@@ -14,13 +14,20 @@ my @modules = qw(
   Exporter
   ExtUtils::MakeMaker
   File::Find
+  File::ShareDir
   File::ShareDir::Install
+  File::Spec
   File::Spec::Functions
   File::Temp
   List::Util
   Log::Any
   Marpa::R2
+  Storable
   Test::More
+  Time::HiRes
+  base
+  charnames
+  constant
   perl
   strict
   warnings
