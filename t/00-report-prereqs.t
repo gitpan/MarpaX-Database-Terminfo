@@ -22,7 +22,9 @@ my @modules = qw(
   List::Util
   Log::Any
   Marpa::R2
+  Path::Tiny
   Storable
+  Test::File::ShareDir
   Test::More
   Time::HiRes
   base
