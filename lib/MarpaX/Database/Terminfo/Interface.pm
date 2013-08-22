@@ -15,7 +15,7 @@ our $HAVE_POSIX = eval "use POSIX; 1;" || 0;
 
 # ABSTRACT: Terminfo interface
 
-our $VERSION = '0.007'; # VERSION
+our $VERSION = '0.008'; # VERSION
 
 
 sub new {
@@ -1207,7 +1207,7 @@ MarpaX::Database::Terminfo::Interface - Terminfo interface
 
 =head1 VERSION
 
-version 0.007
+version 0.008
 
 =head1 SYNOPSIS
 

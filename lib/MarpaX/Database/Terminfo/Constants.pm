@@ -14,13 +14,13 @@ our @EXPORT_TYPES = qw/TERMINFO_BOOLEAN TERMINFO_NUMERIC TERMINFO_STRING/;
 #
 # We use ISO 6429 names as stated per perldoc charnames
 #
-use constant TERMINFO_ESC => "\N{ESC}";
+use constant TERMINFO_ESC => "\N{ESCAPE}";
 use constant TERMINFO_NL  => "\n";  # There is no newline formally. This is mapped to platform dependent "newline"-thingy
-use constant TERMINFO_LF  => "\N{LF}";
-use constant TERMINFO_CR  => "\N{CR}";
-use constant TERMINFO_TAB => "\N{HT}";
-use constant TERMINFO_BS  => "\N{BS}";
-use constant TERMINFO_FF  => "\N{FF}";
+use constant TERMINFO_LF  => "\N{LINE FEED (LF)}";
+use constant TERMINFO_CR  => "\N{CARRIAGE RETURN (CR)}";
+use constant TERMINFO_TAB => "\N{CHARACTER TABULATION}";
+use constant TERMINFO_BS  => "\N{BACKSPACE}";
+use constant TERMINFO_FF  => "\N{FORM FEED (FF)}";
 use constant TERMINFO_SP  => "\N{SPACE}";
 
 our @EXPORT_CHARS = qw/TERMINFO_ESC
@@ -39,7 +39,7 @@ our %EXPORT_TAGS = ('all'       => \@EXPORT_OK,
 
 # ABSTRACT: Terminfo constants
 
-our $VERSION = '0.007'; # VERSION
+our $VERSION = '0.008'; # VERSION
 
 
 1;
@@ -54,7 +54,7 @@ MarpaX::Database::Terminfo::Constants - Terminfo constants
 
 =head1 VERSION
 
-version 0.007
+version 0.008
 
 =head1 SYNOPSIS
 

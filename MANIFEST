@@ -17,6 +17,7 @@ lib/MarpaX/Database/Terminfo/String.pm
 lib/MarpaX/Database/Terminfo/String/Grammar.pm
 lib/MarpaX/Database/Terminfo/String/Grammar/Actions.pm
 perlcritic.rc
+script/char2charname.pl
 script/do_stubs.pl
 script/do_terminfo.pl
 share/ncurses-Caps

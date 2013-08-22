@@ -2,7 +2,7 @@ NAME
     MarpaX::Database::Terminfo::Interface - Terminfo interface
 
 VERSION
-    version 0.007
+    version 0.008
 
 SYNOPSIS
         use MarpaX::Database::Terminfo::Interface qw/:all/;

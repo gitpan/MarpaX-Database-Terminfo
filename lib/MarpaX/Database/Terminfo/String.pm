@@ -14,7 +14,7 @@ use Marpa::R2;
 use Log::Any qw/$log/;
 use Carp qw/croak/;
 
-our $VERSION = '0.007'; # VERSION
+our $VERSION = '0.008'; # VERSION
 
 
 
@@ -63,7 +63,7 @@ MarpaX::Database::Terminfo::String - Parse a terminfo string using Marpa
 
 =head1 VERSION
 
-version 0.007
+version 0.008
 
 =head1 SYNOPSIS
 

@@ -11,7 +11,7 @@ use Marpa::R2;
 use Log::Any qw/$log/;
 use Carp qw/croak/;
 
-our $VERSION = '0.007'; # VERSION
+our $VERSION = '0.008'; # VERSION
 
 
 my %events = (
@@ -142,7 +142,7 @@ MarpaX::Database::Terminfo - Parse a terminfo data base using Marpa
 
 =head1 VERSION
 
-version 0.007
+version 0.008
 
 =head1 SYNOPSIS
 
