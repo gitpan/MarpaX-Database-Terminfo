@@ -28,7 +28,6 @@ my @modules = qw(
   Test::More
   Time::HiRes
   base
-  charnames
   constant
   perl
   strict

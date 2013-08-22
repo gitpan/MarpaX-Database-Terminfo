@@ -9,7 +9,7 @@ our @EXPORT_OK = qw/@TOKENSRE %TOKENSRE/;
 
 # ABSTRACT: Terminfo grammar regexps
 
-our $VERSION = '0.008'; # VERSION
+our $VERSION = '0.009'; # VERSION
 
 
 #
@@ -80,7 +80,7 @@ MarpaX::Database::Terminfo::Grammar::Regexp - Terminfo grammar regexps
 
 =head1 VERSION
 
-version 0.008
+version 0.009
 
 =head1 DESCRIPTION
 

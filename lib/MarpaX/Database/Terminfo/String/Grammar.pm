@@ -7,7 +7,7 @@ use MarpaX::Database::Terminfo::Grammar::CharacterClasses;
 
 # ABSTRACT: Terminfo string grammar in Marpa BNF
 
-our $VERSION = '0.008'; # VERSION
+our $VERSION = '0.009'; # VERSION
 
 
 our $GRAMMAR_CONTENT = do {local $/; <DATA>};
@@ -60,7 +60,7 @@ MarpaX::Database::Terminfo::String::Grammar - Terminfo string grammar in Marpa B
 
 =head1 VERSION
 
-version 0.008
+version 0.009
 
 =head1 SYNOPSIS
 
@@ -116,15 +116,15 @@ __DATA__
 # -------------------------------------------------------------------------
 # Grammar says that a string has the following particularities:
 #
-# Both \E and \e map to an ESCAPE character           ==> TERMINFO_ESC
+# Both \E and \e map to an ESCAPE character           ==> "\e"
 # ^x maps to a control-x for any appropriate x        ==> "\cX"
-# \n maps to newline                                  ==> TERMINFO_NL
-# \l maps to line-feed                                ==> TERMINFO_LF
-# \r maps to return                                   ==> TERMINFO_CR
-# \t maps to tab                                      ==> TERMINFO_TAB
-# \b maps to backspace                                ==> TERMINFO_BS
-# \f maps to form-feed                                ==> TERMINFO_FF
-# \s maps to space                                    ==> TERMINFO_SP
+# \n maps to newline                                  ==> "\n"
+# \l maps to line-feed                                ==> "\n"
+# \r maps to return                                   ==> "\r"
+# \t maps to tab                                      ==> "\t"
+# \b maps to backspace                                ==> "\b"
+# \f maps to form-feed                                ==> "\f"
+# \s maps to space                                    ==> ' '
 #
 # General syntax
 #
@@ -302,7 +302,7 @@ _CARET      ~ '^'
 _BS         ~ '\'
 _ALLOWED_BS ~ [abEeflnrst^\,:0]
 _ALLOWED_BS ~ _OCTALDIGIT _OCTALDIGIT _OCTALDIGIT
-_C0_AND_DEL ~ [@A-Z[\]^_ ?]
+_C0_AND_DEL ~ [@A-Z[\]^_?]
 ESCAPED_CHARACTER ~ _CARET _C0_AND_DEL
                   | _BS _ALLOWED_BS
 INISPRINTEXCEPTCOMMA ~ [\p{MarpaX::Database::Terminfo::Grammar::CharacterClasses::InIsPrintExceptComma}]

@@ -2,13 +2,12 @@ use strict;
 use warnings FATAL => 'all';
 
 package MarpaX::Database::Terminfo::String::Grammar::Actions;
-use MarpaX::Database::Terminfo::Constants qw/:chars/;
-use Carp qw/carp/;
+use Carp qw/croak/;
 use Log::Any qw/$log/;
 
 # ABSTRACT: Terminfo grammar actions
 
-our $VERSION = '0.008'; # VERSION
+our $VERSION = '0.009'; # VERSION
 
 
 
@@ -41,121 +40,60 @@ sub addEscapedCharacterToRc {
 	$log->tracef('addEscapedCharacterToRc(c="%s")', $c);
     }
 
-    my $rc = '';
+    return "\$rc .= " . $self->_escapedCharacter($c) . "; # $c";
+}
 
-    if ($c eq '\\E' || $c eq '\\e') {
-	$rc = TERMINFO_ESC;
-    } elsif ($c eq '\\n') {
-	$rc = TERMINFO_NL;
-    } elsif ($c eq '\\l') {
-	$rc = TERMINFO_LF;
-    } elsif ($c eq '\\r') {
-	$rc = TERMINFO_CR;
-    } elsif ($c eq '\\b') {
-	$rc = TERMINFO_TAB;
-    } elsif ($c eq '\\b') {
-	$rc = TERMINFO_BS;
-    } elsif ($c eq '\\f') {
-	$rc = TERMINFO_FF;
-    } elsif ($c eq '\\s') {
-	$rc = TERMINFO_SP;
-    } elsif (substr($c, 0, 1) eq '^') {
+sub _escapedCharacter {
+    my ($self, $c) = @_;
+
+    if ($log->is_trace) {
+	$log->tracef('_escapedCharacter(c="%s")', $c);
+    }
+
+    if    ($c eq '\\E' || $c eq '\\e') { return "\"\\e\"";  }
+    elsif ($c eq '\\a'               ) { return "\"\\a\"";  }
+    elsif ($c eq '\\n'               ) { return "\"\\n\"";  }
+    elsif ($c eq '\\l'               ) { return "\"\\n\"";  }
+    elsif ($c eq '\\r'               ) { return "\"\\r\"";  }
+    elsif ($c eq '\\b'               ) { return "\"\\b\"";  }
+    elsif ($c eq '\\f'               ) { return "\"\\f\"";  }
+    elsif ($c eq '\\t'               ) { return "\"\\t\"";  }
+    elsif ($c eq '\\s'               ) { return "' '";      }
+    elsif ($c eq '\\^'               ) { return "'^'";      }
+    elsif ($c eq '\\\\'              ) { return "'\\\\'";   }
+    elsif ($c eq '\\,'               ) { return "','";      }
+    elsif ($c eq '\\:'               ) { return "':'";      }
+    # In perl \0 is not the end of a string
+    elsif ($c eq '\\0'               ) { return "\"\\0\""; }
+
+    elsif (substr($c, 0, 1) eq '^') {
 	#
 	# In perl, control-X is \cX, we support the ASCII C0 set + DEL.
-	# Here the terminfo string really know exactly what it wants -;
+	# i.e. the range [@A-Z[\]^_?] (c.f. Marpa grammar).
+	# They can ALL be translated litteraly except \c\ that has to be
+	# writen as \c\X in perl. Then we remove the last X.
 	#
 	my $this = $c;
 	substr($this, 0, 1, '');
-	my $rc;
-	if ($this eq '@') {
-	    $rc = "\c@";
-	} elsif ($this eq 'A') {
-	    $rc = "\cA";
-	} elsif ($this eq 'B') {
-	    $rc = "\cB";
-	} elsif ($this eq 'C') {
-	    $rc = "\cC";
-	} elsif ($this eq 'D') {
-	    $rc = "\cD";
-	} elsif ($this eq 'E') {
-	    $rc = "\cE";
-	} elsif ($this eq 'F') {
-	    $rc = "\cF";
-	} elsif ($this eq 'G') {
-	    $rc = "\cG";
-	} elsif ($this eq 'H') {
-	    $rc = "\cH";
-	} elsif ($this eq 'I') {
-	    $rc = "\cI";
-	} elsif ($this eq 'J') {
-	    $rc = "\cJ";
-	} elsif ($this eq 'K') {
-	    $rc = "\cK";
-	} elsif ($this eq 'L') {
-	    $rc = "\cL";
-	} elsif ($this eq 'M') {
-	    $rc = "\cM";
-	} elsif ($this eq 'N') {
-	    $rc = "\cN";
-	} elsif ($this eq 'O') {
-	    $rc = "\cO";
-	} elsif ($this eq 'P') {
-	    $rc = "\cP";
-	} elsif ($this eq 'Q') {
-	    $rc = "\cQ";
-	} elsif ($this eq 'R') {
-	    $rc = "\cR";
-	} elsif ($this eq 'S') {
-	    $rc = "\cS";
-	} elsif ($this eq 'T') {
-	    $rc = "\cT";
-	} elsif ($this eq 'U') {
-	    $rc = "\cU";
-	} elsif ($this eq 'V') {
-	    $rc = "\cV";
-	} elsif ($this eq 'W') {
-	    $rc = "\cW";
-	} elsif ($this eq 'X') {
-	    $rc = "\cX";
-	} elsif ($this eq 'Y') {
-	    $rc = "\cY";
-	} elsif ($this eq 'Z') {
-	    $rc = "\cZ";
-	} elsif ($this eq '[') {
-	    $rc = "\c[";
-	} elsif ($this eq '\\') {
-	    #
-	    # Shall I use \c\X or chr(28) ? Even if it seems an overhead \c\X seems more portable
-	    #
- 	    $rc = "\c\X";
-	    substr($rc, -1, 1, '');
-	} elsif ($this eq ']') {
-	    $rc = "\c]";
-	} elsif ($this eq '^') {
-	    $rc = "\c^";
-	} elsif ($this eq '_') {
-	    $rc = "\c_";
-	} elsif ($this eq 'Z') {
-	    $rc = TERMINFO_SP;
-	} elsif ($this eq '?') {
-	    $rc = "\c?";
+	if ($this eq '\\') {
+	    return "\"\\c\\X\"; substr(\$rc, -1, 1, '')";
 	} else {
-	    carp "Unsupported control character '$c'\n";
+	    return "\"\\c$this\"";
 	}
-
-    } elsif (substr($c, 0, 1) eq '\\') {
+    }
+    elsif (substr($c, 0, 1) eq '\\') {
 	#
 	# Spec says this must be octal digits
 	#
 	my $oct = $c;
 	substr($oct, 0, 1, '');
-	$rc = chr(oct($oct) || oct(200));
-    } else {
-	carp "Unhandled escape sequence $c\n";
+	$oct =~ s/^0*//;          # Take care... oct(012) == oct(12) = 10 ...
+	# Note: in perl \0 is NOT the end of a string
+	return "chr(oct($oct))";
     }
-
-    my $ord = ord($rc);
-    return "\$rc .= chr($ord); # $c";
+    else {
+	croak "Unhandled escape sequence $c\n";
+    }
 }
 
 
@@ -165,9 +103,10 @@ sub addCharacterToRc {
     if ($log->is_trace) {
 	$log->tracef('addCharacterToRc(c="%s")', $c);
     }
-
-    my $ord = ord($c);
-    return "\$rc .= chr($ord); # $c";
+    #
+    # If we quotemeta, then we have to use double quotes
+    #
+    return "\$rc .= \"" . quotemeta($c) . "\"; # $c";
 }
 
 
@@ -303,18 +242,12 @@ sub addPushConst {
     my $inside = $const;
     substr($inside, 0, 2, '');   # Remove %' at the beginning
     substr($inside, -1, 1, '');  # Remove ' at the end
-    my $c;
-    if (length($inside) > 1) {   # This is \ddd
-	my $oct = $inside;
-	substr($oct, 0, 1, '');  # Remove \ at the beginning
-	$c = chr(oct($oct) || oct(200));
+
+    if (substr($inside, 0, 1) eq '\\') {
+	return "push(\@iparam, " . $self->_escapedCharacter($inside) . "); # $const";
     } else {
-	$c = $inside;            # This is a character
+	return "push(\@iparam, \"" . quotemeta($inside) . "\"); # $const";
     }
-
-    my $ord = ord($c);
-
-    return "push(\@iparam, chr($ord)); # $const";
 }
 
 
@@ -652,7 +585,7 @@ MarpaX::Database::Terminfo::String::Grammar::Actions - Terminfo grammar actions
 
 =head1 VERSION
 
-version 0.008
+version 0.009
 
 =head1 DESCRIPTION
 

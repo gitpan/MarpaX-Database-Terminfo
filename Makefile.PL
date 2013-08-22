@@ -31,7 +31,6 @@ my %WriteMakefileArgs = (
     "Storable" => 0,
     "Time::HiRes" => 0,
     "base" => 0,
-    "charnames" => 0,
     "constant" => 0,
     "strict" => 0,
     "warnings" => 0
@@ -47,7 +46,7 @@ my %WriteMakefileArgs = (
     "Test::File::ShareDir" => 0,
     "Test::More" => 0
   },
-  "VERSION" => "0.008",
+  "VERSION" => "0.009",
   "test" => {
     "TESTS" => "t/*.t"
   }
