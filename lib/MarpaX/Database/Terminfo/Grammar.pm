@@ -6,7 +6,7 @@ use MarpaX::Database::Terminfo::Grammar::Actions;
 
 # ABSTRACT: Terminfo grammar in Marpa BNF
 
-our $VERSION = '0.009'; # VERSION
+our $VERSION = '0.010'; # VERSION
 
 
 our $GRAMMAR_CONTENT = do {local $/; <DATA>};
@@ -59,7 +59,7 @@ MarpaX::Database::Terminfo::Grammar - Terminfo grammar in Marpa BNF
 
 =head1 VERSION
 
-version 0.009
+version 0.010
 
 =head1 SYNOPSIS
 

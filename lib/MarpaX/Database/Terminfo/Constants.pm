@@ -16,7 +16,7 @@ our %EXPORT_TAGS = ('all'       => \@EXPORT_OK,
 
 # ABSTRACT: Terminfo constants
 
-our $VERSION = '0.009'; # VERSION
+our $VERSION = '0.010'; # VERSION
 
 
 1;
@@ -31,7 +31,7 @@ MarpaX::Database::Terminfo::Constants - Terminfo constants
 
 =head1 VERSION
 
-version 0.009
+version 0.010
 
 =head1 SYNOPSIS
 

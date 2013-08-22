@@ -9,7 +9,7 @@ use Log::Any qw/$log/;
 
 # ABSTRACT: Terminfo grammar actions
 
-our $VERSION = '0.009'; # VERSION
+our $VERSION = '0.010'; # VERSION
 
 
 
@@ -111,7 +111,7 @@ MarpaX::Database::Terminfo::Grammar::Actions - Terminfo grammar actions
 
 =head1 VERSION
 
-version 0.009
+version 0.010
 
 =head1 DESCRIPTION
 

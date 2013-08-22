@@ -15,7 +15,7 @@ our $HAVE_POSIX = eval "use POSIX; 1;" || 0;
 
 # ABSTRACT: Terminfo interface
 
-our $VERSION = '0.009'; # VERSION
+our $VERSION = '0.010'; # VERSION
 
 
 sub new {
@@ -934,7 +934,7 @@ sub delay {
 	    #
 	    my $baudrate;
 	    $self->tvgetnum('baudrate', \$baudrate);
-	    my $nullcount = ($ms * $baudrate) / (BAUDBYTE * 1000);
+	    my $nullcount = int(($ms * $baudrate) / (BAUDBYTE * 1000));
 	    #
 	    # We have no interface to 'tack' program, so no need to have a global for _nulls_sent
 	    #
@@ -1207,7 +1207,7 @@ MarpaX::Database::Terminfo::Interface - Terminfo interface
 
 =head1 VERSION
 
-version 0.009
+version 0.010
 
 =head1 SYNOPSIS
 
